@@ -19,7 +19,7 @@ from pyspark.sql.functions import col, explode, current_timestamp, input_file_na
 # PASSO 1: CONFIGURAÇÃO DE ACESSO AO AZURE
 # Preencha com seus dados do Azure 
 storage_account_name = "f1datalakecarol2026"
-storage_account_key = "6FQP+MNUBoy3xCDvI7ZBjUH7IoJqbY7lS82W0seE2S2M5gCpVVhIQfWoZ/FTZAmVXs2E6WR7p2PY+AStKv01ig=="
+storage_account_key = "INSIRA_SUA_CHAVE_AQUI"
 container_name = "bronze"
 
 # Configura o Spark (Mounting)

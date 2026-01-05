@@ -102,7 +102,7 @@ Como prova de valor (Proof of Value), foi desenvolvido um Dashboard no Databrick
 
 ## 📫 Autor
 
-Desenvolvido por **[Seu Nome]**
+Desenvolvido por **Ana Paula Leão**
 
 - [LinkedIn](https://www.linkedin.com/in/ana-paula-leao/)
 - [Portfólio](https://github.com/ana-lapas)
@@ -110,4 +110,5 @@ Desenvolvido por **[Seu Nome]**
 ---
 
 _Projeto desenvolvido com foco em boas práticas de Engenharia de Dados para cenários de alta escala._
+
 

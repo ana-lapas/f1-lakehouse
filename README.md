@@ -53,7 +53,7 @@ O projeto segue a **Medallion Architecture** (Bronze, Silver, Gold), garantindo 
 
 O pipeline é totalmente automatizado via **Databricks Workflows**, simulando um ambiente de produção com dependências e monitoramento.
 
-![Pipeline Visual Databricks](docs/pipeline-workflow.png)
+![Pipeline Visual Databricks](src/docs/pipeline-workflow.png)
 _(Fluxo de execução: Ingestão -> Transformação -> Modelagem)_
 
 - **Job Name:** `f1_analytics_orchestrator`
@@ -65,7 +65,7 @@ _(Fluxo de execução: Ingestão -> Transformação -> Modelagem)_
 
 Como prova de valor (Proof of Value), foi desenvolvido um Dashboard no Databricks SQL para monitorar os KPIs em tempo real.
 
-![Dashboard Analytics](docs/Dashboard_analytics.png)
+![Dashboard Analytics](src/docs/Dashboard_analytics.png)
 
 **Insights Gerados:**
 
@@ -102,7 +102,7 @@ Como prova de valor (Proof of Value), foi desenvolvido um Dashboard no Databrick
 
 ## 📫 Autor
 
-Desenvolvido por **[Seu Nome]**
+Desenvolvido por **Ana Paula Leão**
 
 - [LinkedIn](https://www.linkedin.com/in/ana-paula-leao/)
 - [Portfólio](https://github.com/ana-lapas)
@@ -110,3 +110,5 @@ Desenvolvido por **[Seu Nome]**
 ---
 
 _Projeto desenvolvido com foco em boas práticas de Engenharia de Dados para cenários de alta escala._
+
+

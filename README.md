@@ -1,114 +1,87 @@
 # 🏎️ F1 Data Lakehouse | End-to-End Data Engineering Project
 
-![Status](https://img.shields.io/badge/Status-Concluído-success)
-![Cloud](https://img.shields.io/badge/Cloud-Azure-blue)
-![Engine](https://img.shields.io/badge/Engine-Databricks-orange)
-![Language](https://img.shields.io/badge/Language-Python%20%7C%20SQL-yellow)
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![Apache Spark](https://img.shields.io/badge/Apache%20Spark-PySpark-E25A1C?style=flat&logo=apachespark&logoColor=white)](https://spark.apache.org/)
+[![Databricks](https://img.shields.io/badge/Databricks-Workflows-FF3621?style=flat&logo=databricks&logoColor=white)](https://databricks.com/)
+[![Azure](https://img.shields.io/badge/Microsoft-Azure%20Data%20Lake-0089D6?style=flat&logo=microsoftazure&logoColor=white)](https://azure.microsoft.com/)
+[![Delta Lake](https://img.shields.io/badge/Delta%20Lake-ACID-00ADD8?style=flat&logo=deltalake&logoColor=white)](https://delta.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 💼 Sobre o Projeto (Business Value)
-
-Este projeto não é apenas uma análise de Fórmula 1. É uma simulação completa de um **Data Lakehouse Corporativo**, desenhado para resolver problemas de escalabilidade, qualidade de dados e Business Intelligence.
-
-O objetivo foi construir um pipeline resiliente que ingere dados brutos, trata e modela para Analytics, aplicando as mesmas técnicas usadas em grandes empresas de Varejo e SaaS (como **Petlove**, **iFood** ou **Nubank**).
-
-### 🎯 Visão de Produto: Do Esporte ao Negócio
-
-Para demonstrar aplicabilidade comercial, mapeei métricas técnicas da F1 para KPIs de negócios reais:
-
-| Conceito F1               | Equivalente Corporativo (SaaS/Varejo) | Problema de Negócio Resolvido                                           |
-| :------------------------ | :------------------------------------ | :---------------------------------------------------------------------- |
-| **Resultados de Corrida** | **Fato Vendas / Transações**          | Monitoramento de receita e volume de vendas.                            |
-| **Pilotos & Equipes**     | **Clientes & Marcas**                 | Análise de LTV (Lifetime Value) e Market Share.                         |
-| **Abandonos (DNF)**       | **Churn (Cancelamento)**              | Identificação de taxa de perda de clientes e confiabilidade do produto. |
-| **Volta Mais Rápida**     | **Pico de Uso/Acesso**                | Análise de performance e engajamento máximo.                            |
+An end-to-end Data Engineering project simulating an enterprise-grade Retail/SaaS Lakehouse architecture on Microsoft Azure and Databricks, utilizing PySpark, Delta Lake, and Dimensional Modeling.
 
 ---
+## 💼 Business Value & Product Vision
 
-## 🏗️ Arquitetura da Solução
+This project transcends simple sports analytics by mapping Formula 1 domain entities to commercial SaaS and Retail Key Performance Indicators (KPIs). It addresses core data challenges: scalability, schema enforcement, data quality, and high-performance Business Intelligence.
 
-O projeto segue a **Medallion Architecture** (Bronze, Silver, Gold), garantindo a qualidade do dado em cada estágio.
-
-### 1. Ingestão (Camada Bronze) 🥉
-
-- **Fonte:** API Externa (Jolpica/Ergast F1).
-- **Processo:** Coleta de dados brutos em formato JSON.
-- **Tech:** Python (`requests`) e PySpark.
-
-### 2. Transformação (Camada Silver) 🥈
-
-- **Limpeza:** Tratamento de nulos, tipagem forte (Schema Enforcement) e normalização de datas.
-- **Deduplicação:** Remoção de registros duplicados para garantir integridade.
-- **Performance:** Uso do formato **Delta Lake** e **Particionamento** (`partitionBy('season')`) para otimizar leituras em Big Data.
-
-### 3. Modelagem de Negócios (Camada Gold) 🥇
-
-- **Modelagem:** Criação de um **Star Schema** (Modelo Dimensional).
-- **Dimensões:** `dim_drivers`, `dim_constructors`, `dim_races`.
-- **Fato:** `fact_results` (contendo apenas chaves e métricas).
-- **Objetivo:** Facilitar a conexão com ferramentas de BI (Power BI, Tableau, Databricks SQL).
-
+| F1 Domain Concept | Corporate Equivalent (SaaS / Retail) | Business Problem Solved |
+| :--- | :--- | :--- |
+| **Race Results** | Fact Sales / Transactions | Revenue monitoring and transaction volume tracking. |
+| **Drivers & Constructors** | Customers & Brands | Lifetime Value (LTV) and Market Share analysis. |
+| **DNFs (Did Not Finish)** | Customer Churn | Identifying churn rates and product reliability. |
+| **Fastest Lap** | Peak Usage / Traffic Spikes | Performance analysis and maximum engagement tracking. |
 ---
+## 🏗️ Solution Architecture (Medallion Architecture)
 
-## ⚙️ Orquestração e Pipeline (CI/CD)
+The pipeline implements the **Medallion Architecture** (Bronze, Silver, Gold) to guarantee data quality, ACID transactions, and governance at each stage:
 
-O pipeline é totalmente automatizado via **Databricks Workflows**, simulando um ambiente de produção com dependências e monitoramento.
+1. **Ingestion Layer (Bronze):** 🥉
+   * **Source:** External REST APIs (Jolpica/Ergast F1).
+   * **Process:** Raw ingestion of JSON payloads using Python (`requests`) and PySpark.
+   * **Storage:** Append-only raw storage on Azure Data Lake Gen2.
+
+2. **Transformation Layer (Silver):** 🥈
+   * **Data Cleaning:** Handling null values, strict typing (`Schema Enforcement`), and timestamp normalization.
+   * **Deduplication & Partitioning:** Removing duplicate records and optimizing distributed scans using `.partitionBy('season')`.
+   * **Format:** Delta Lake format ensuring ACID compliance and time travel capabilities.
+
+3. **Business Modeling Layer (Gold):** 🥇
+   * **Dimensional Modeling:** Designing a **Star Schema** optimized for BI and downstream analytics.
+     * *Dimensions:* `dim_drivers`, `dim_constructors`, `dim_races`.
+     * *Fact Table:* `fact_results` (containing surrogate keys and pre-aggregated metrics).
+----
+## ⚙️ Orchestration & CI/CD Pipeline
+
+The pipeline is fully automated via **Databricks Workflows (Databricks Jobs)**, simulating a production-grade environment with dependency management and error handling:
 
 ![Pipeline Visual Databricks](src/docs/pipeline-workflow.png)
-_(Fluxo de execução: Ingestão -> Transformação -> Modelagem)_
+_(Execution Flow: Ingestion ➔ Transformation ➔ Modeling)_
 
 - **Job Name:** `f1_analytics_orchestrator`
-- **Features:** Retries automáticos em caso de falha de API, parâmetros dinâmicos (ano/temporada) e alertas de erro.
-
+- **Features:** Automated API retry logic, dynamic parameters (season/year), and failure alerting notifications.
 ---
+## 📊 Analytics & Proof of Value
 
-## 📊 Analytics e Resultados
-
-Como prova de valor (Proof of Value), foi desenvolvido um Dashboard no Databricks SQL para monitorar os KPIs em tempo real.
+To demonstrate commercial value, an interactive dashboard was built in Databricks SQL:
 
 ![Dashboard Analytics](src/docs/Dashboard_analytics.png)
-
-**Insights Gerados:**
-
-1.  **Dominância de Mercado:** Análise de pontos por equipe (Market Share).
-2.  **Performance Individual:** Ranking de pilotos por temporada.
-3.  **KPI de Confiabilidade:** Cálculo da taxa de "Churn" (Abandonos de corrida), essencial para medir a saúde técnica das equipes.
-
+* **Market Dominance:** Team-level point distribution and Market Share analysis.
+* **Individual Performance:** Driver standings and seasonal evolution rankings.
+* **Reliability KPIs:** Churn rate equivalents (DNF analysis) measuring technical health.
 ---
+## 🛠️ Technology Stack
 
-## 🛠️ Stack Tecnológica
-
-- **Cloud Provider:** Microsoft Azure (Data Lake Gen2).
-- **Processamento Distribuído:** Apache Spark (Databricks).
-- **Storage & Formato:** Delta Lake (ACID Transactions).
-- **Linguagem:** Python (PySpark) para ETL e SQL para Análises.
-- **Orquestração:** Databricks Jobs.
-
+* **Cloud Provider:** Microsoft Azure (Data Lake Gen2)
+* **Distributed Compute:** Apache Spark (Databricks)
+* **Storage & Protocol:** Delta Lake (ACID Transactions)
+* **Languages:** Python (PySpark) for ETL, SQL for Analytics
+* **Orchestration:** Databricks Workflows / Jobs
 ---
+## 🚀 How to Execute
 
-## 🚀 Como Executar
-
-1.  **Clone o repositório:**
+### 1. Clone the Repository
     ```bash
     git clone [https://github.com/ana-lapas/f1-lakehouse.git](https://github.com/ana-lapas/f1-lakehouse.git)
     ```
 2.  **Setup no Databricks:**
-    - Importe os notebooks da pasta `/notebooks`.
-    - Configure as credenciais do Azure no notebook `1_Ingestao_Bronze`.
-3.  **Execute o Pipeline:**
-    - Crie um Job apontando para os 3 notebooks sequencialmente.
-    - Execute o Job e verifique os dados no Data Lake.
-
+    - Import the notebooks from the `/notebooks` directory into your Databricks workspace.
+    - Configure your Azure credentials in `1_Ingestao_Bronze`.
+3.  **Run the Pipeline**
+    - Create a Databricks Job pointing to the three notebooks in sequential order (Bronze ➔ Silver ➔ Gold).
+    - Trigger the job execution and inspect the resulting tables on the Data Lake.
 ---
-
-## 📫 Autor
-
-Desenvolvido por **Ana Paula Leão**
+## 📫 Author
+**Ana Paula Leão**
 
 - [LinkedIn](https://www.linkedin.com/in/ana-paula-leao/)
 - [Portfólio](https://github.com/ana-lapas)
-
----
-
-_Projeto desenvolvido com foco em boas práticas de Engenharia de Dados para cenários de alta escala._
-
-
